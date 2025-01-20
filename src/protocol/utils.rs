@@ -28,18 +28,24 @@ macro_rules! make_char_map {
 macro_rules! make_char_ranges {
     ($array:ident[$i:ident]) => {};
     ($array:ident[$i:ident] $lb:tt..$hb:tt, $($tail:tt)*) => {
-        $array[$i] = $lb as u8;
-        $i += 1;
-        $array[$i] = $hb as u8;
-        $i += 1;
-        $crate::make_char_ranges!($array[$i] $($tail)*)
+        #[allow(clippy::char_lit_as_u8)]
+        {
+            $array[$i] = $lb as u8;
+            $i += 1;
+            $array[$i] = $hb as u8;
+            $i += 1;
+            $crate::make_char_ranges!($array[$i] $($tail)*);
+        }
     };
     ($array:ident[$i:ident] $r:tt, $($tail:tt)*) => {
-        $array[$i] = $r as u8;
-        $i += 1;
-        $array[$i] = $r as u8;
-        $i += 1;
-        $crate::make_char_ranges!($array[$i] $($tail)*)
+        #[allow(clippy::char_lit_as_u8)]
+        {
+            $array[$i] = $r as u8;
+            $i += 1;
+            $array[$i] = $r as u8;
+            $i += 1;
+            $crate::make_char_ranges!($array[$i] $($tail)*);
+        }
     };
 }
 
